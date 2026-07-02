@@ -2,6 +2,7 @@ package com.app.ecom.controller;
 
 
 
+import com.app.ecom.dto.UserRequest;
 import com.app.ecom.dto.UserResponse;
 import com.app.ecom.model.User;
 import com.app.ecom.service.UserService;
@@ -27,21 +28,21 @@ public class UserController {
     }
 
     @GetMapping("/api/users/{id}")
-    public ResponseEntity<User> getUser(@PathVariable Long id) {
+    public ResponseEntity<UserResponse> getUser(@PathVariable Long id) {
         return userService.fetchUser(id)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping("/api/users")
-    public ResponseEntity<String> createUser(@RequestBody User user) {
-        userService.addUser(user);
+    public ResponseEntity<String> createUser(@RequestBody UserRequest userRequest) {
+        userService.addUser(userRequest);
         return ResponseEntity.ok("User added successfully");
     }
 
     @PutMapping("/api/users/{id}")
-    public ResponseEntity<String> updateUser(@PathVariable Long id, @RequestBody User updatedUser) {
-        boolean updated = userService.updateUser(id, updatedUser);
+    public ResponseEntity<String> updateUser(@PathVariable Long id, @RequestBody UserRequest updatedUserRequest) {
+        boolean updated = userService.updateUser(id, updatedUserRequest);
         if (updated) {
             return ResponseEntity.ok("User updated successfully");
         }else{
